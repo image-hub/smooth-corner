@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free online tool to round image corners. Smooth Corner helps you create rounded corner images instantly with customizable radius.">
+    <meta name="keywords" content="round image corners, smooth corners, image editor, free online tool, photo editor">
+    <title>Smooth Corner | Free Online Image Corner Rounding Tool</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #405DE6;
+            --secondary-color: #5851DB;
+            --accent-color: #833AB4;
+            --pink-color: #E1306C;
+            --red-color: #FD1D1D;
+            --orange-color: #F56040;
+            --gradient: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color), var(--pink-color), var(--red-color), var(--orange-color));
+            --text-color: #333;
+            --light-text: #777;
+            --bg-color: #fafafa;
+            --card-bg: #fff;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            padding: 0;
+            margin: 0;
+        }
+
+        header {
+            text-align: center;
+            padding: 2rem 1rem;
+            background: var(--gradient);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: var(--bg-color);
+            transform: skewY(-2deg);
+            z-index: 1;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .ad-container {
+            margin: 2rem auto;
+            text-align: center;
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .ad-banner {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .tool-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--gradient);
+        }
+
+        .upload-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .drop-area {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+        }
+
+        .drop-area:hover {
+            border-color: var(--primary-color);
+        }
+
+        .drop-area.active {
+            border-color: var(--primary-color);
+            background-color: rgba(64, 93, 230, 0.05);
+        }
+
+        #imagePreview {
+            max-width: 100%;
+            max-height: 100%;
+            display: none;
+            object-fit: contain;
+            border-radius: 0;
+        }
+
+        .drop-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            padding: 1rem;
+        }
+
+        .upload-icon {
+            width: 48px;
+            height: 48px;
+            fill: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .drop-message p {
+            color: var(--light-text);
+            margin-bottom: 1rem;
+        }
+
+        #imageUpload {
+            display: none;
+        }
+
+        .controls-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #e0e0e0;
+            outline: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            background: var(--accent-color);
+        }
+
+        input[type="color"] {
+            width: 100%;
+            height: 40px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 2px;
+            cursor: pointer;
+        }
+
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 1rem;
+            background-color: white;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(64, 93, 230, 0.2);
+        }
+
+        .btn-primary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 1rem;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-primary:disabled::before {
+            display: none;
+        }
+
+        .btn-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+
+        .how-to-use {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .how-to-use h2 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .how-to-use ol {
+            padding-left: 1.5rem;
+        }
+
+        .how-to-use li {
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            background: #333;
+            color: white;
+            margin-top: 3rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .tool-container {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .tagline {
+                font-size: 1rem;
+            }
+            
+            .drop-area {
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-container {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tool-container {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* SEO Improvements */
+        #currentYear {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M50 0 L100 50 L50 100 L0 50 Z" fill="white" />
+                <path d="M30 30 L70 30 L70 70 L30 70 Z" fill="none" stroke="white" stroke-width="5" />
+            </svg>
+            <h1>Smooth Corner</h1>
+        </div>
+        <p class="tagline">Transform your images with beautifully rounded corners</p>
+    </header>
+
+    <main>
+        <!-- Top Ad Container - Native Banner -->
+        <div class="ad-container">
+            <script async="async" data-cfasync="false" src="//pl24016660.profitableratecpm.com/3848e7f2686c7038fe4b335f92382cc7/invoke.js"></script>
+            <div id="container-3848e7f2686c7038fe4b335f92382cc7"></div>
+        </div>
+
+        <div class="tool-container">
+            <div class="upload-section">
+                <div class="drop-area" id="dropArea">
+                    <img src="" alt="Preview" id="imagePreview">
+                    <div class="drop-message">
+                        <svg class="upload-icon" viewBox="0 0 24 24">
+                            <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+                        </svg>
+                        <p>Drag & drop your image here or click to browse</p>
+                        <input type="file" id="imageUpload" accept="image/*">
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls-section">
+                <div class="control-group">
+                    <label for="cornerRadius">Corner Radius: <span id="radiusValue">25</span>px</label>
+                    <input type="range" id="cornerRadius" min="0" max="150" value="25">
+                </div>
+
+                <div class="control-group">
+                    <label for="backgroundColor">Background Color:</label>
+                    <input type="color" id="backgroundColor" value="#ffffff">
+                </div>
+
+                <div class="control-group">
+                    <label for="imageFormat">Output Format:</label>
+                    <select id="imageFormat">
+                        <option value="png">PNG (Transparent)</option>
+                        <option value="jpeg">JPEG (Smaller Size)</option>
+                        <option value="webp">WebP (Modern)</option>
+                    </select>
+                </div>
+
+                <button id="downloadBtn" class="btn-primary" disabled>
+                    <span class="btn-text">Download Image</span>
+                    <span class="btn-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
+                        </svg>
+                    </span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Social Bar Ad -->
+        <div class="ad-container">
+            <script type='text/javascript' src='//pl24015984.profitableratecpm.com/3d/22/66/3d2266e43a6da3e91f73b207ed4a439d.js'></script>
+        </div>
+
+        <div class="how-to-use">
+            <h2>How to Use Smooth Corner</h2>
+            <ol>
+                <li>Upload your image by dragging & dropping or clicking the upload area</li>
+                <li>Adjust the corner radius using the slider</li>
+                <li>Choose a background color (for JPEG format)</li>
+                <li>Select your preferred output format</li>
+                <li>Click "Download Image" to save your rounded image</li>
+            </ol>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; <span id="currentYear"></span> Smooth Corner. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Contact</a>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current year in footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+            // DOM Elements
+            const dropArea = document.getElementById('dropArea');
+            const imageUpload = document.getElementById('imageUpload');
+            const imagePreview = document.getElementById('imagePreview');
+            const cornerRadius = document.getElementById('cornerRadius');
+            const radiusValue = document.getElementById('radiusValue');
+            const backgroundColor = document.getElementById('backgroundColor');
+            const imageFormat = document.getElementById('imageFormat');
+            const downloadBtn = document.getElementById('downloadBtn');
+            
+            // Update radius value display
+            cornerRadius.addEventListener('input', function() {
+                radiusValue.textContent = this.value;
+                updateImagePreview();
+            });
+            
+            // Handle file selection via click
+            dropArea.addEventListener('click', function() {
+                imageUpload.click();
+            });
+            
+            // Handle file selection via input
+            imageUpload.addEventListener('change', function(e) {
+                handleFiles(e.target.files);
+            });
+            
+            // Handle drag and drop
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                dropArea.classList.add('active');
+            }
+            
+            function unhighlight() {
+                dropArea.classList.remove('active');
+            }
+            
+            dropArea.addEventListener('drop', function(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                handleFiles(files);
+            });
+            
+            // Process selected files
+            function handleFiles(files) {
+                if (files.length > 0) {
+                    const file = files[0];
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            imagePreview.src = e.target.result;
+                            imagePreview.style.display = 'block';
+                            dropArea.querySelector('.drop-message').style.display = 'none';
+                            downloadBtn.disabled = false;
+                            updateImagePreview();
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        alert('Please select an image file.');
+                    }
+                }
+            }
+            
+            // Update image preview with rounded corners
+            function updateImagePreview() {
+                if (imagePreview.src && imagePreview.src !== '') {
+                    const radius = cornerRadius.value;
+                    imagePreview.style.borderRadius = `${radius}px`;
+                }
+            }
+            
+            // Handle background color and format changes
+            [backgroundColor, imageFormat].forEach(element => {
+                element.addEventListener('change', updateImagePreview);
+            });
+            
+            // Download processed image
+            downloadBtn.addEventListener('click', function() {
+                if (!imagePreview.src || imagePreview.src === '') {
+                    alert('Please upload an image first.');
+                    return;
+                }
+                
+                const radius = cornerRadius.value;
+                const bgColor = backgroundColor.value;
+                const format = imageFormat.value;
+                
+                // Create a canvas to process the image
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+                
+                img.onload = function() {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    
+                    // Draw background if format is JPEG (no transparency)
+                    if (format === 'jpeg') {
+                        ctx.fillStyle = bgColor;
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    }
+                    
+                    // Create rounded corners
+                    ctx.beginPath();
+                    ctx.moveTo(radius, 0);
+                    ctx.lineTo(canvas.width - radius, 0);
+                    ctx.quadraticCurveTo(canvas.width, 0, canvas.width, radius);
+                    ctx.lineTo(canvas.width, canvas.height - radius);
+                    ctx.quadraticCurveTo(canvas.width, canvas.height, canvas.width - radius, canvas.height);
+                    ctx.lineTo(radius, canvas.height);
+                    ctx.quadraticCurveTo(0, canvas.height, 0, canvas.height - radius);
+                    ctx.lineTo(0, radius);
+                    ctx.quadraticCurveTo(0, 0, radius, 0);
+                    ctx.closePath();
+                    ctx.clip();
+                    
+                    // Draw the image
+                    ctx.drawImage(img, 0, 0);
+                    
+                    // Convert to data URL and download
+                    let mimeType, extension;
+                    switch(format) {
+                        case 'jpeg':
+                            mimeType = 'image/jpeg';
+                            extension = 'jpg';
+                            break;
+                        case 'webp':
+                            mimeType = 'image/webp';
+                            extension = 'webp';
+                            break;
+                        default:
+                            mimeType = 'image/png';
+                            extension = 'png';
+                    }
+                    
+                    const dataURL = canvas.toDataURL(mimeType, 0.92);
+                    downloadImage(dataURL, `rounded-image.${extension}`);
+                };
+                
+                img.src = imagePreview.src;
+            });
+            
+            // Helper function to trigger download
+            function downloadImage(dataURL, filename) {
+                const link = document.createElement('a');
+                link.href = dataURL;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // Track download event (you can replace with your analytics)
+                console.log('Image downloaded:', filename);
+            }
+            
+            // Initialize with placeholder
+            dropArea.querySelector('.drop-message').style.display = 'block';
+            imagePreview.style.display = 'none';
+            downloadBtn.disabled = true;
+        });
+    </script>
+</body>
+</html>
