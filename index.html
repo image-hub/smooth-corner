@@ -622,7 +622,7 @@
                     return;
                 }
                 
-                const radius = cornerRadius.value;
+                const radius = parseInt(cornerRadius.value);
                 const bgColor = backgroundColor.value;
                 const format = imageFormat.value;
                 
@@ -637,6 +637,12 @@
                     
                     // Clear canvas
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    // For JPEG, fill background first
+                    if (format === 'jpeg') {
+                        ctx.fillStyle = bgColor;
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    }
                     
                     // Create rounded rectangle path
                     ctx.beginPath();
@@ -656,14 +662,6 @@
                     
                     // Draw the image
                     ctx.drawImage(img, 0, 0);
-                    
-                    // For JPEG, fill background first
-                    if (format === 'jpeg') {
-                        ctx.globalCompositeOperation = 'destination-over';
-                        ctx.fillStyle = bgColor;
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
-                        ctx.globalCompositeOperation = 'source-over';
-                    }
                     
                     // Convert to data URL and download
                     let mimeType, extension;
