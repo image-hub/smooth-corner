@@ -69,8 +69,8 @@
             gap: 1rem;
             margin-bottom: 1rem;
         }
-
-        .logo {
+    
+                .logo {
             width: 40px;
             height: 40px;
         }
@@ -428,10 +428,18 @@
     </header>
 
     <main>
-        <!-- Top Ad Container - Native Banner -->
+        <!-- Top Ad Container -->
         <div class="ad-container">
-            <script async="async" data-cfasync="false" src="//pl24016660.profitableratecpm.com/3848e7f2686c7038fe4b335f92382cc7/invoke.js"></script>
-            <div id="container-3848e7f2686c7038fe4b335f92382cc7"></div>
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : '860fbc8b7c2b0f28d28d045811fb18aa',
+                    'format' : 'iframe',
+                    'height' : 250,
+                    'width' : 300,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/860fbc8b7c2b0f28d28d045811fb18aa/invoke.js"></script>
         </div>
 
         <div class="tool-container">
@@ -479,9 +487,18 @@
             </div>
         </div>
 
-        <!-- Social Bar Ad -->
+        <!-- Bottom Ad Container -->
         <div class="ad-container">
-            <script type='text/javascript' src='//pl24015984.profitableratecpm.com/3d/22/66/3d2266e43a6da3e91f73b207ed4a439d.js'></script>
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : '860fbc8b7c2b0f28d28d045811fb18aa',
+                    'format' : 'iframe',
+                    'height' : 250,
+                    'width' : 300,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/860fbc8b7c2b0f28d28d045811fb18aa/invoke.js"></script>
         </div>
 
         <div class="how-to-use">
@@ -504,8 +521,8 @@
             <a href="#">Contact</a>
         </div>
     </footer>
-
-    <script>
+    
+        <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Set current year in footer
             document.getElementById('currentYear').textContent = new Date().getFullYear();
@@ -621,24 +638,26 @@
                     canvas.width = img.width;
                     canvas.height = img.height;
                     
-                    // Draw background if format is JPEG (no transparency)
+                    // Only draw background if format is JPEG (for other formats keep transparent)
                     if (format === 'jpeg') {
                         ctx.fillStyle = bgColor;
                         ctx.fillRect(0, 0, canvas.width, canvas.height);
                     }
                     
-                    // Create rounded corners
+                    // Create rounded corners path
                     ctx.beginPath();
                     ctx.moveTo(radius, 0);
                     ctx.lineTo(canvas.width - radius, 0);
-                    ctx.quadraticCurveTo(canvas.width, 0, canvas.width, radius);
+                    ctx.arcTo(canvas.width, 0, canvas.width, radius, radius);
                     ctx.lineTo(canvas.width, canvas.height - radius);
-                    ctx.quadraticCurveTo(canvas.width, canvas.height, canvas.width - radius, canvas.height);
+                    ctx.arcTo(canvas.width, canvas.height, canvas.width - radius, canvas.height, radius);
                     ctx.lineTo(radius, canvas.height);
-                    ctx.quadraticCurveTo(0, canvas.height, 0, canvas.height - radius);
+                    ctx.arcTo(0, canvas.height, 0, canvas.height - radius, radius);
                     ctx.lineTo(0, radius);
-                    ctx.quadraticCurveTo(0, 0, radius, 0);
+                    ctx.arcTo(0, 0, radius, 0, radius);
                     ctx.closePath();
+                    
+                    // Clip the rounded rectangle
                     ctx.clip();
                     
                     // Draw the image
